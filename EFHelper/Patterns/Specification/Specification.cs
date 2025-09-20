@@ -3,6 +3,17 @@ using System.Linq.Expressions;
 
 using System.Linq.Expressions;
 
+
+/// <summary>
+/// Базовая реализация Спецификации
+/// </summary>
+/// <remarks>
+/// Инкапсулирует реализацию полей интерфейса ISpecification для дальнейших реализаций ISpecification.
+/// Определяет базовые конструкторы копирования ветки Specification -> Дочерний класс,
+/// а также быстрого прокидывания запроса фильтрации, для удобства дальнейших реализаций. 
+/// Помимо конструкторов, определяет базовые защищенные методы наполнения реализованных полей
+/// </remarks>
+/// <typeparam name="TEntity"></typeparam>
 public abstract class Specification<TEntity> : ISpecification<TEntity>
     where TEntity : class
 {
@@ -149,10 +160,12 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
     /// </summary>
     /// <param name="skip">Сколько пропустить</param>
     /// <param name="take">Сколько вставить</param>
-    public void AddPaging(int skip, int take)
+    protected void AddPaging(int? skip = null, int? take = null)
     {
-        _skip = skip;
-        _take = take;
+        _skip = 0;
+        _take = 0;
+        _skip ??= skip;
+        _take ??= take;
     }
     
     
