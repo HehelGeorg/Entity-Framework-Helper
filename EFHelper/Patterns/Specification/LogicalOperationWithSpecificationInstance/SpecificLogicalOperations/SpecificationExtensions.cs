@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace EFHelper.Patterns;
 
 /// <summary>
@@ -17,7 +19,7 @@ public static class SpecificationExtensions
     public static Specification<TEntity> And<TEntity>(this Specification<TEntity> left, Specification<TEntity> right)
         where TEntity : class
     {
-        return new AndSpecification<TEntity>(left, right);
+        return new LogicalOperation<TEntity>(left, right, Expression.And); 
     }
     
     /// <summary>
@@ -29,23 +31,10 @@ public static class SpecificationExtensions
     /// <returns></returns>
     public static Specification<TEntity> Or<TEntity>(this Specification<TEntity> left, Specification<TEntity> right)
         where TEntity : class
-    {
-        return new OrSpecification<TEntity>(left, right);
+    { 
+        return new LogicalOperation<TEntity>(left, right, Expression.OrElse); 
     }
     
-    /// <summary>
-    /// Соединяет дерево к текущему 
-    /// по логическому оператору "ИСКЛЮЧАЮЩИЕ ИЛИ"/"EXCLUSIVE OR"/"XOR"
-    /// </summary>
-    /// <param name="left">Текущее дерево</param>
-    /// <param name="right">Соединяемое дерево по логическому оператору</param>
-    /// <returns></returns>
-    public static Specification<TEntity> XOr<TEntity>(this Specification<TEntity> left, Specification<TEntity> right)
-        where TEntity : class
-    {
-        return new XorSpecification<TEntity>(left, right);
-    }
-    
-    
+
     
 }

@@ -55,102 +55,47 @@ public class SpecificationBuilder<TEntity> : Specification<TEntity> where TEntit
     /// <param name="query">Строковые запросы включения</param>
     public SpecificationBuilder<TEntity> WithStringIncludeQuery(List<string> query)
     {
-        AddIncludeString(query);
+        AddIncludeString(query.ToArray());
         return this;
     }
     
     /// <summary>
-    /// Публичное добавление запросов первичной сортировки
+    /// Публичное добавление запросов сортировки
     /// </summary>
-    /// <remarks>
-    /// Первичные запросы сортировки не суммируются.
-    /// Если WithOrderByQuery() было уже вызвано,
-    /// То при новом вызове пробрасывается исключение
+    ///  <remarks>
+    /// К первому добавленному запросу будет применена OrderBY
+    /// К последующим ThenBy
     /// </remarks>
-    /// <exception cref="Exception">При попытке использования WithOrderByQuery() больше чем раз</exception>
-    /// <param name="query">Объект запроса сортировки</param>
+    /// <param name="query">Запрос сортировки</param>
+    /// <returns>Текущий объект спецификации с добавленной сортировкой</returns>
     public SpecificationBuilder<TEntity> WithOrderByQuery(Expression<Func<TEntity, object>> query)
     {
-        if (OrderByQueries?.Count == 0)
-        {
+    
             AddOrderByQuery(query);
             return this;
-        }
-        else
-        {
-            throw new Exception("Order queries cannot be changed");
-        }
+  
     }
     
     
-    /// <summary>
-    /// Публичное добавление запросов вторичной сортировки
-    /// </summary>
-    /// <remarks>
-    /// С каждым вызовом WithThenByQuery(),
-    /// Запросы суммируются
-    /// </remarks>
-    /// <param name="query">Объект запроса сортировки</param>
-    public SpecificationBuilder<TEntity> WithThenByQuery(Expression<Func<TEntity, object>> query)
-    {
-        if (OrderByQueries?.Count > 0)
-        {
-            AddOrderByQuery(query);
-            return this;
-        }
-        else
-        {
-            throw new Exception("Please add Order By query");
-        }
-        
-    }
-    
+  
     
     /// <summary>
-    /// Публичное добавление запросов первичной обратной сортировки
+    /// Публичное добавление запросов обратной сортировки
     /// </summary>
     /// <remarks>
-    /// Первичные запросы обратной сортировки не суммируются.
-    /// Если WithOrderByDescendingQuery() было уже вызвано,
-    /// То при новом вызове пробрасывается исключение
+    /// К первому запросу будет применена OrderDescBY
+    /// К последующим ThenDescBy
     /// </remarks>
-    /// <exception cref="Exception">При попытке использования WithOrderByDescendingQuery() больше чем раз</exception>
-    /// <param name="query">Объект запроса обратной сортировки</param>
+    /// <param name="query">Запрос обратной сортировки</param>
+    /// <returns>Текущий объект спецификации с добавленной обратной сортировкой</returns>
     public SpecificationBuilder<TEntity> WithOrderByDescendingQuery(Expression<Func<TEntity, object>> query)
     {
-        if (OrderByDescendingQueries?.Count == 0)
-        {
             AddOrderByDescendingQuery(query);
             return this;
-        }
-        else
-        {
-            throw new Exception("Order Desc queries cannot be changed");
-        }
+    
     }
     
     
-    
-    /// <summary>
-    /// Публичное добавление запросов вторичной обратной сортировки
-    /// </summary>
-    /// <remarks>
-    /// С каждым вызовом WithThenByDescendingQuery(),
-    /// Запросы суммируются
-    /// </remarks>
-    /// <param name="query">Объект запроса обратной сортировки</param>
-    public SpecificationBuilder<TEntity> WithThenByDescendingQuery(Expression<Func<TEntity, object>> query)
-    {
-        if (OrderByDescendingQueries?.Count > 0)
-        {
-            AddOrderByDescendingQuery(query);
-            return this;
-        }
-        else
-        {
-            throw new Exception("Please add Order Desc By query");
-        }
-    }
     
     /// <summary>
     /// Публичное указание пропускаемых элементов

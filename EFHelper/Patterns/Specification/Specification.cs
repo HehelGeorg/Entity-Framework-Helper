@@ -17,6 +17,8 @@ using System.Linq.Expressions;
 public abstract class Specification<TEntity> : ISpecification<TEntity>
     where TEntity : class
 {
+    
+    
     private List<Expression<Func<TEntity, object>>>? _includeQueries;
     
     private List<Expression<Func<TEntity, object>>>? _orderByQueries;
@@ -103,6 +105,7 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
         _skip = specification.Skip;
         _take = specification.Take;
     }
+    
 
     
     /// <summary>
@@ -128,13 +131,17 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
     /// <summary>
     /// Добавляет строковые включения
     /// </summary>
-    /// <param name="query">список строковых запросов включений</param>
-    protected void AddIncludeString(List<string> query)
+    /// <remarks>
+    /// Добавляет множество 
+    /// </remarks>
+    /// <param name="query">Список строковых запросов включений</param>
+    protected void AddIncludeString(params string[] query)
     {
         _includeStrings ??= new();
         _includeStrings.AddRange(query);
     }
     
+  
     /// <summary>
     /// Добавляет  сортировку
     /// </summary>
@@ -154,7 +161,9 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
         _orderByDescendingQueries ??= new();
         _orderByDescendingQueries.Add(query);
     }
-
+    
+    
+    
     /// <summary>
     /// Добавляет пагинацию
     /// </summary>
@@ -162,10 +171,9 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
     /// <param name="take">Сколько вставить</param>
     protected void AddPaging(int? skip = null, int? take = null)
     {
-        _skip = 0;
-        _take = 0;
-        _skip ??= skip;
-        _take ??= take;
+
+        if(skip.HasValue)  _skip = skip;
+        if(take.HasValue) _take = take;
     }
     
     
